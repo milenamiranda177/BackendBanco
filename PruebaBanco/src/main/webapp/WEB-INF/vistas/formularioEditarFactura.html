@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<!-- action linka con el metodo del controlador -->
+<!--  object define el objeto que tiene ese metodo del controlador -->
+<form th:action="@{formularioSalvarFactura}" th:object=${factura} method="POST">
+<p>
+Numero:<input type="text" th:field="*{numero}"/>
+</p>
+<p>
+Concepto:<input type="text"   th:field="*{concepto}"/>
+</p>
+<p>
+Importe:<input type="text" th:field="*{importe}"/>
+</p>
+<input type="submit" value="aceptar"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	
+	
+});
+
+function cargar() {
+	 
+	$("table").empty();
+	axios.get('webapi/facturas').then(function (response) {
+	    for (factura of response.data) {
+	    //plantillas de javascript comienzan con una coma invertida ` 
+	    $("table").append(`<tr id="${factura.numero}"><td>${factura.numero}</td>
+	    <td>${factura.concepto}</td>
+	    <td>${factura.importe}</td>
+	    <td><input type="button" value="borrar" onclick="borrar(${factura.numero})"</td>
+	    <td><input type="button" value="editar" onclick="editar(${factura.numero})"</td>
+	    </tr>`);
+	    }
+	  })
+}
+
+function editar(numero) {
+	
+	$("#numero").val($(`#${numero}`).find("td:eq(0)").text());
+	$("#concepto").val($(`#${numero}`).find("td:eq(1)").text());
+	$("#importe").val($(`#${numero}`).find("td:eq(2)").text());
+}
+
+function salvar() {
+	let numero=$("#numero").val();
+	let factura= {numero:$("#numero").val(),
+			concepto:$("#concepto").val(),
+			importe:$("#importe").val()};
+	
+	axios.put(`webapi/facturas/${numero}`,factura).then(function(response) {
+		
+			console.log("salvar");
+	});
+}
+	
+	
+function borrar(numero) {
+	axios.delete(`webapi/facturas/${numero}`).then(function(response) {
+			alert("borrado");
+	})
+}
+
+function insertar() {
+	
+	//alert("vamos a insertar");
+	let factura= {numero:$("#numero").val(),
+			concepto:$("#concepto").val(),
+			importe:$("#importe").val()};
+	axios.post("webapi/facturas",factura).then(function(response) {
+		
+			console.log("inserto");
+	});
+}
+</script>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+	<input type="button" value="cargar" onclick="cargar()" />
+	<table>
+	</table>
+
+<form >
+<p>
+Numero:<input type="text"  id="numero" name="numero"/>
+</p>
+<p>
+Concepto:<input type="text" id="concepto" name="concepto"/>
+</p>
+<p>
+Importe:<input type="text"  id="importe" name="importe"/>
+</p>
+<input type="button" value="insertar" onclick="insertar()"/>
+<input type="button" value="salvar" onclick="salvar()"/>
+</form>
+</body>
+</html>
